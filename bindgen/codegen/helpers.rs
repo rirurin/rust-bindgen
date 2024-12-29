@@ -187,31 +187,34 @@ pub(crate) mod ast_ty {
         match ik {
             IntKind::Bool => syn::parse_quote! { bool },
             IntKind::Char { .. } => raw_type(ctx, "c_char"),
-            IntKind::SChar => raw_type(ctx, "c_schar"),
-            IntKind::UChar => raw_type(ctx, "c_uchar"),
-            IntKind::Short => raw_type(ctx, "c_short"),
-            IntKind::UShort => raw_type(ctx, "c_ushort"),
-            IntKind::Int => raw_type(ctx, "c_int"),
-            IntKind::UInt => raw_type(ctx, "c_uint"),
-            IntKind::Long => raw_type(ctx, "c_long"),
-            IntKind::ULong => raw_type(ctx, "c_ulong"),
-            IntKind::LongLong => raw_type(ctx, "c_longlong"),
-            IntKind::ULongLong => raw_type(ctx, "c_ulonglong"),
+
+            // IntKind::SChar => raw_type(ctx, "c_schar"),
+            // IntKind::UChar => raw_type(ctx, "c_uchar"),
+            // IntKind::Short => raw_type(ctx, "c_short"),
+            // IntKind::UShort => raw_type(ctx, "c_ushort"),
+            // IntKind::Int => raw_type(ctx, "c_int"),
+            // IntKind::UInt => raw_type(ctx, "c_uint"),
+            // IntKind::Long => raw_type(ctx, "c_long"),
+            // IntKind::ULong => raw_type(ctx, "c_ulong"),
+            // IntKind::LongLong => raw_type(ctx, "c_longlong"),
+            // IntKind::ULongLong => raw_type(ctx, "c_ulonglong"),  
+            
             IntKind::WChar => {
                 let layout =
                     layout.expect("Couldn't compute wchar_t's layout?");
                 Layout::known_type_for_size(layout.size)
                     .expect("Non-representable wchar_t?")
             }
-
-            IntKind::I8 => syn::parse_quote! { i8 },
-            IntKind::U8 => syn::parse_quote! { u8 },
-            IntKind::I16 => syn::parse_quote! { i16 },
-            IntKind::U16 => syn::parse_quote! { u16 },
-            IntKind::I32 => syn::parse_quote! { i32 },
-            IntKind::U32 => syn::parse_quote! { u32 },
-            IntKind::I64 => syn::parse_quote! { i64 },
-            IntKind::U64 => syn::parse_quote! { u64 },
+            // NOTE: The Ghidra export is from a Windows build, so we can assume that long/ulong
+            // are 32 bits long. 
+            IntKind::I8 | IntKind::SChar => syn::parse_quote! { i8 },
+            IntKind::U8 | IntKind::UChar => syn::parse_quote! { u8 },
+            IntKind::I16 | IntKind::Short => syn::parse_quote! { i16 },
+            IntKind::U16 | IntKind::UShort => syn::parse_quote! { u16 },
+            IntKind::I32 | IntKind::Int | IntKind::Long => syn::parse_quote! { i32 },
+            IntKind::U32 | IntKind::UInt | IntKind::ULong => syn::parse_quote! { u32 },
+            IntKind::I64 | IntKind::LongLong => syn::parse_quote! { i64 },
+            IntKind::U64 | IntKind::ULongLong => syn::parse_quote! { u64 },
             IntKind::Custom { name, .. } => {
                 syn::parse_str(name).expect("Invalid integer type.")
             }

@@ -46,7 +46,7 @@ impl Layout {
 
     /// Construct a new `Layout` with the given `size` and `align`. It is not
     /// packed.
-    pub(crate) fn new(size: usize, align: usize) -> Self {
+    pub(crate) fn new(size: usize, align: usize) -> Self { 
         Layout {
             size,
             align,
